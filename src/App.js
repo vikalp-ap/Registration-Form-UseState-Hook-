@@ -2,20 +2,18 @@ import "./App.css";
 import React, { useState } from "react";
 import styled from "styled-components";
 
-export default function App() {
-  const [formData, setFormData] = useState({
-    username: "",
-    email: "",
-    age: "",
-  });
+function UserForm({ addUserData }) {
+  const [name, setName] = useState("");
+  const [email, setEmail] = useState("");
+  const [age, setAge] = useState("");
 
-  const handleInput = (event) => {
-    const name = event.target.name;
-    const value = event.target.value;
-
-    setFormData((prev) => {
-      return { ...prev, [name]: value };
-    });
+  const dataSubmit = (event) => {
+    event.preventDefault();
+    const userData = { name, email, age };
+    addUserData(userData);
+    setName("");
+    setEmail("");
+    setAge("");
   };
 
   return (
@@ -24,7 +22,7 @@ export default function App() {
         <div className="card">
           <h2 className="card-title text-center">Detail Form</h2>
           <div className="card-body py-md-4">
-            <form>
+            <form onSubmit={dataSubmit}>
               <div className="form-group">
                 <input
                   type="text"
@@ -33,8 +31,8 @@ export default function App() {
                   name="username"
                   placeholder="Name"
                   autoComplete="off"
-                  value={formData.username}
-                  onChange={handleInput}
+                  value={name}
+                  onChange={(event) => setName(event.target.value)}
                 />
               </div>
               <div className="form-group">
@@ -45,11 +43,10 @@ export default function App() {
                   name="email"
                   autoComplete="off"
                   placeholder="Email"
-                  value={formData.email}
-                  onChange={handleInput}
+                  value={email}
+                  onChange={(event) => setEmail(event.target.value)}
                 />
               </div>
-
               <div className="form-group">
                 <input
                   type="number"
@@ -58,21 +55,59 @@ export default function App() {
                   name="age"
                   placeholder="Age"
                   autoComplete="off"
-                  value={formData.age}
-                  onChange={handleInput}
+                  value={age}
+                  onChange={(event) => setAge(event.target.value)}
                 />
               </div>
               <div className="d-flex flex-row align-items-center justify-content-between">
                 <button className="btn btn-primary">Submit Details</button>
               </div>
             </form>
-            <div>
-              <p>{`My name is ${formData.username} and email is ${formData.email}. I am ${formData.age} years old.`}</p>
-            </div>
           </div>
         </div>
       </div>
     </Wrapper>
+  );
+}
+
+function UserTable({ data }) {
+  return (
+    <table>
+      <thead>
+        <tr>
+          <th>Name</th>
+          <th>Email</th>
+          <th>Age</th>
+        </tr>
+      </thead>
+      <tbody>
+        {data.map((user) => (
+          <tr key={user.email}>
+            <td>{user.name}</td>
+            <td>{user.email}</td>
+            <td>{user.age}</td>
+          </tr>
+        ))}
+      </tbody>
+    </table>
+  );
+}
+
+export default function App() {
+  const [userData, setUserData] = useState([]);
+
+  const addUserData = (userData) => {
+    setUserData((prev) => [...prev, userData]);
+  };
+
+  return (
+    <div>
+      <UserForm addUserData={addUserData}></UserForm>
+      <center>
+      <UserTable data={userData}></UserTable>
+      </center>
+      
+    </div>
   );
 }
 
