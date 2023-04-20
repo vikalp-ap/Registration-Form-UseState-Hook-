@@ -1,19 +1,33 @@
-import React, { useRef } from "react";
+import React, { useMemo, useState } from "react";
 import styled from "styled-components";
 
-function RefHook({ addUserData }) {
-  const inputRef = useRef();
+function MemoHook() {
+  const [myNum, setMyNum] = useState(0);
+  const [show, setShow] = useState(false);
 
-  const changeBorder = () => {
-    inputRef.current.focus();
-    inputRef.current.style.backgroundColor = "#90EE90";
+  const getValue = () => {
+    return setMyNum(myNum + 1);
   };
+
+  const countNumber = (num) => {
+    console.log("Count : ", num);
+    for (let i = 0; i <= 100000; i++) {} //just to slow the application
+    return num;
+  };
+
+  const CheckData = useMemo(() => {
+    return countNumber(myNum);
+  }, [myNum]);
 
   return (
     <Wrapper>
-      <input type="text" ref={inputRef} />
-      <br />
-      <button onClick={changeBorder}>submit</button>
+      <button onClick={getValue} style={{ backgroundColor: "orange" }}>
+        Counter
+      </button>
+      <p>My new number : {CheckData} </p>
+      <button onClick={() => setShow(!show)}>
+        {show ? "You clicked me" : "Please click me"}
+      </button>
     </Wrapper>
   );
 }
@@ -24,15 +38,7 @@ const Wrapper = styled.section`
   justify-content: center;
   align-items: center;
   flex-direction: column;
-  input {
-    min-width: 20rem;
-    padding: 1rem 0.5rem;
-    color: #000;
-    font-size: 2rem;
-  }
-  button {
-    text-transform: uppercase;
-  }
+  font-size: 2.4rem;
 `;
 
-export default RefHook;
+export default MemoHook;
