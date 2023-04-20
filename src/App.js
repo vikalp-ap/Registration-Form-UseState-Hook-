@@ -1,43 +1,38 @@
-import React, { useReducer } from "react";
-import Button from "@mui/material/Button";
+import React, { useRef } from "react";
 import styled from "styled-components";
-import reducer from "./reducer"
 
-const initialValue = 0;
+function RefHook({ addUserData }) {
+  const inputRef = useRef();
 
-const ReducerHook = () => {
-  const [count, dispatch] = useReducer(reducer, initialValue);
+  const changeBorder = () => {
+    inputRef.current.focus();
+    inputRef.current.style.backgroundColor = "#90EE90";
+  };
 
   return (
-    <>
-      <Wrapper>
-        <div className="container">
-          <Button variant="contained" onClick={() => dispatch({ type: "INC" })}>
-            Increment
-          </Button>
-          <h1>{count}</h1>
-          <Button variant="contained" onClick={() => dispatch({ type: "DEC" })}>
-            Decrement
-          </Button>
-        </div>
-      </Wrapper>
-    </>
+    <Wrapper>
+      <input type="text" ref={inputRef} />
+      <br />
+      <button onClick={changeBorder}>submit</button>
+    </Wrapper>
   );
-};
+}
 
 const Wrapper = styled.section`
-  .container {
-    height: 100vh;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    gap: 4.8rem;
+  height: 100vh;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  flex-direction: column;
+  input {
+    min-width: 20rem;
+    padding: 1rem 0.5rem;
+    color: #000;
+    font-size: 2rem;
   }
-
-  h1 {
-    font-size: 5.4rem;
-    color: #2e86c1;
+  button {
+    text-transform: uppercase;
   }
 `;
 
-export default ReducerHook;
+export default RefHook;
